@@ -1,0 +1,43 @@
+<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+
+// 模拟数据库存储
+$notice = "欢迎使用MicLawAgent AI法律智能平台，专业AI文书生成服务（对接豆包大模型）";
+$news = [
+  [
+    'title' => 'AI法律文书生成功能正式上线',
+    'time' => '2026-03-08',
+    'content' => '平台已对接豆包AI大模型，可自动生成专业法律文书，覆盖起诉状、合同、答辩状等多场景，支持手机+PC端使用。'
+  ],
+  [
+    'title' => '平台新增离婚协议书生成功能',
+    'time' => '2026-03-07',
+    'content' => '新增离婚协议书AI生成模板，严格按照婚姻法规范制作，可直接打印使用。'
+  ]
+];
+
+// 处理接口请求
+$act = $_GET['act'] ?? '';
+switch ($act) {
+  // 增加访问量
+  case 'add_view':
+    echo json_encode(['code' => 200, 'msg' => 'success']);
+    break;
+  
+  // 获取公告
+  case 'get_notice':
+    echo json_encode(['code' => 200, 'data' => $notice]);
+    break;
+  
+  // 获取资讯列表
+  case 'news_list':
+    echo json_encode(['code' => 200, 'data' => $news]);
+    break;
+  
+  // 默认返回
+  default:
+    echo json_encode(['code' => 400, 'msg' => '无效请求']);
+    break;
+}
+?>

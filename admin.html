@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicLawAgent - 管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,"Microsoft YaHei",sans-serif}
+body{background:#f5f7fa;padding:20px}
+.container{max-width:1000px;margin:0 auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 10px #eee}
+h1{color:#1e293b;margin-bottom:20px;border-bottom:1px solid #eee;padding-bottom:10px}
+.form-group{margin-bottom:20px}
+label{display:block;margin-bottom:8px;color:#334155;font-weight:600}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+textarea{min-height:120px;resize:vertical}
+.btn{padding:12px 24px;background:#4EE2FF;color:#05070F;border:none;border-radius:8px;font-weight:600;cursor:pointer}
+.btn:hover{background:#3dc8e8}
+.tab{display:flex;gap:10px;margin-bottom:20px}
+.tab-btn{padding:8px 16px;border:1px solid #ddd;border-radius:6px;cursor:pointer}
+.tab-btn.active{background:#4EE2FF;color:#05070F;border-color:#4EE2FF}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.upload-box{border:1px dashed #ddd;padding:30px;text-align:center;border-radius:8px;margin-bottom:10px}
+.news-item{padding:10px;border:1px solid #eee;border-radius:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>MicLawAgent 管理后台</h1>
+  
+  <div class="tab">
+    <div class="tab-btn active" onclick="switchTab('base')">基础设置</div>
+    <div class="tab-btn" onclick="switchTab('logo')">LOGO上传</div>
+    <div class="tab-btn" onclick="switchTab('notice')">公告管理</div>
+    <div class="tab-btn" onclick="switchTab('news')">资讯管理</div>
+    <div class="tab-btn" onclick="switchTab('password')">修改密码</div>
+  </div>
+
+  <!-- 基础设置 -->
+  <div class="tab-content active" id="base">
+    <div class="form-group">
+      <label>网站名称</label>
+      <input type="text" id="siteName" placeholder="MicLawAgent - AI智能法律代理平台">
+    </div>
+    <div class="form-group">
+      <label>联系方式</label>
+      <input type="text" id="contact" placeholder="contact@miclawagent.com">
+    </div>
+    <button class="btn" onclick="saveBase()">保存基础设置</button>
+  </div>
+
+  <!-- LOGO上传 -->
+  <div class="tab-content" id="logo">
+    <div class="upload-box" onclick="document.getElementById('logoFile').click()">
+      <p>点击上传LOGO（建议尺寸：80x40）</p>
+    </div>
+    <input type="file" id="logoFile" style="display:none" accept="image/png,image/jpg,image/jpeg">
+    <button class="btn" onclick="uploadLogo()">上传LOGO</button>
+  </div>
+
+  <!-- 公告管理 -->
+  <div class="tab-content" id="notice">
+    <div class="form-group">
+      <label>公告内容</label>
+      <textarea id="noticeContent" placeholder="欢迎使用MicLawAgent AI法律智能平台，专业AI文书生成服务"></textarea>
+    </div>
+    <button class="btn" onclick="saveNotice()">保存公告</button>
+  </div>
+
+  <!-- 资讯管理 -->
+  <div class="tab-content" id="news">
+    <div class="form-group">
+      <label>资讯标题</label>
+      <input type="text" id="newsTitle" placeholder="AI法律文书生成功能正式上线">
+    </div>
+    <div class="form-group">
+      <label>资讯内容</label>
+      <textarea id="newsContent" placeholder="平台已对接豆包AI大模型，可自动生成专业法律文书，覆盖起诉状、合同等场景"></textarea>
+    </div>
+    <button class="btn" onclick="addNews()">添加资讯</button>
+    <div id="newsList" style="margin-top:20px"></div>
+  </div>
+
+  <!-- 修改密码 -->
+  <div class="tab-content" id="password">
+    <div class="form-group">
+      <label>原密码</label>
+      <input type="password" id="oldPwd" placeholder="请输入原密码">
+    </div>
+    <div class="form-group">
+      <label>新密码</label>
+      <input type="password" id="newPwd" placeholder="请输入新密码">
+    </div>
+    <div class="form-group">
+      <label>确认新密码</label>
+      <input type="password" id="confirmPwd" placeholder="请再次输入新密码">
+    </div>
+    <button class="btn" onclick="changePwd()">修改密码</button>
+  </div>
+</div>
+
+<script>
+// 切换标签
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// 模拟保存基础设置
+function saveBase() {
+  alert('基础设置保存成功！');
+}
+
+// 模拟上传LOGO
+function uploadLogo() {
+  alert('LOGO上传成功！已保存至upload/logo.png');
+}
+
+// 模拟保存公告
+function saveNotice() {
+  alert('公告保存成功！');
+}
+
+// 模拟添加资讯
+function addNews() {
+  const title = document.getElementById('newsTitle').value;
+  const content = document.getElementById('newsContent').value;
+  if (!title || !content) {
+    alert('请填写标题和内容！');
+    return;
+  }
+  const newsItem = document.createElement('div');
+  newsItem.className = 'news-item';
+  newsItem.innerHTML = `<div><strong>${title}</strong></div><button onclick="deleteNews(this)" style="padding:4px 8px;background:#ff4d4f;color:#fff;border:none;border-radius:4px">删除</button>`;
+  document.getElementById('newsList').appendChild(newsItem);
+  document.getElementById('newsTitle').value = '';
+  document.getElementById('newsContent').value = '';
+  alert('资讯添加成功！');
+}
+
+// 模拟删除资讯
+function deleteNews(el) {
+  el.parentElement.remove();
+  alert('资讯删除成功！');
+}
+
+// 模拟修改密码
+function changePwd() {
+  const oldPwd = document.getElementById('oldPwd').value;
+  const newPwd = document.getElementById('newPwd').value;
+  const confirmPwd = document.getElementById('confirmPwd').value;
+  
+  if (oldPwd === '') {
+    alert('请输入原密码！');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    alert('两次输入的新密码不一致！');
+    return;
+  }
+  alert('密码修改成功！请重新登录');
+}
+
+// 初始化加载资讯列表
+window.onload = function() {
+  const newsItem = document.createElement('div');
+  newsItem.className = 'news-item';
+  newsItem.innerHTML = `<div><strong>AI法律文书生成功能正式上线</strong></div><button onclick="deleteNews(this)" style="padding:4px 8px;background:#ff4d4f;color:#fff;border:none;border-radius:4px">删除</button>`;
+  document.getElementById('newsList').appendChild(newsItem);
+}
+</script>
+</body>
+</html>
